@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "runner-with-api"
+version = "0.1.0"
+description = ""
+authors = ["dorinclisu"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+anyio = "^4.3.0"
+uvicorn = "^0.29.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
