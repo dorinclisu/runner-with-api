@@ -38,8 +38,7 @@ class MyRunner(AsyncRunnerWithAPI):
 
     @router.put('/config')
     async def configure(self, config: dict) -> None:
-        logging.info('Configuring process ...')
-        await sleep(1)
+        logging.info('Configuring process')
         self.config = config.copy()
 
 

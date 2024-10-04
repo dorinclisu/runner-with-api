@@ -22,7 +22,6 @@ import logging
 
 from anyio import sleep
 from litestar import Litestar, get, put
-
 from runner_with_api import AsyncRunnerWithAPI
 
 
@@ -42,7 +41,7 @@ class MyRunner(AsyncRunnerWithAPI):
 
     @put('/config')
     async def configure(self, data: dict) -> None:
-        logging.info('Configuring process ...')
+        logging.info('Configuring process')
         self.config = data
 
     @get('/config')

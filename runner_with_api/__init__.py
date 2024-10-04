@@ -2,7 +2,7 @@ import logging
 import signal
 import types
 from contextlib import asynccontextmanager
-from typing import Any
+from typing import Any, Union
 
 import uvicorn
 from anyio import create_task_group
@@ -69,7 +69,7 @@ class AsyncRunnerWithAPI:
         return _lifespan
 
 
-    def run_with_api(self, app: ASGIApplication | Any, host='127.0.0.1', port=8000):
+    def run_with_api(self, app: Union[ASGIApplication, Any], host='127.0.0.1', port=8000):
         """Run the API listener on host:port while the runner lifespan is managed.
         Unix signal handlers are installed by uvicorn for graceful shutdown.
         """

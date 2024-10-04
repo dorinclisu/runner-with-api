@@ -35,8 +35,7 @@ class MyRunner(AsyncRunnerWithAPI):
 
     @put('/config')
     async def configure(self, data: dict) -> None:
-        logging.info('Configuring process ...')
-        await sleep(1)
+        logging.info('Configuring process')
         self.config = data
 
 
