@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "runner-with-api"
 version = "0.1.0"
-description = ""
+description = "Enable HTTP API on a long running process"
 authors = ["dorinclisu"]
 readme = "README.md"
 
@@ -16,6 +16,7 @@ fastapi = "^0.111.0"
 litestar = "^2.9.1"
 pytest = "^8.3.3"
 pytest-asyncio = "^0.24.0"
+toml = "^0.10.2"
 
 [build-system]
 requires = ["poetry-core"]
