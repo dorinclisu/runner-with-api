@@ -69,11 +69,12 @@ class AsyncRunnerWithAPI:
         return _lifespan
 
 
-    def run_with_api(self, app: Union[ASGIApplication, Any], host='127.0.0.1', port=8000):
+    def run_with_api(self, app: Union[ASGIApplication, Any], **uvicorn_kwargs):
         """Run the API listener on host:port while the runner lifespan is managed.
         Unix signal handlers are installed by uvicorn for graceful shutdown.
+        Can pass uvicorn kwargs such as host, port, log_config.
         """
-        uvicorn.run(app, log_config=None, host=host, port=port)
+        uvicorn.run(app, **uvicorn_kwargs)
 
 
     def patch_fastapi_router(self, router: APIRouter):
