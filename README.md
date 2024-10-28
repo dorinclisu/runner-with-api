@@ -1,6 +1,6 @@
 # Overview
 ### Runner With API
-A seamless bridge between long-running asynchronous tasks and a modern HTTP API using FastAPI or Litestar.
+A seamless bridge between long-running asynchronous tasks and a modern HTTP API using [FastAPI](https://fastapi.tiangolo.com/) or [Litestar](https://litestar.dev/), based on [AnyIO](https://anyio.readthedocs.io).
 
 This library makes it easy to build interactive services that couple a continuous background process with an HTTP server. By integrating FastAPI and Litestar, we are leveraging the familiar programming style of decorated path operation functions that can interact directly with the processing loop, enabling dynamic configuration and monitoring through HTTP endpoints.
 

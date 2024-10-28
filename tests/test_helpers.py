@@ -2,21 +2,21 @@
 import anyio
 import pytest
 
-from runner_with_api.helpers import AsyncLatest
+from runner_with_api.helpers import AnyioDeque
 
 
 @pytest.mark.asyncio
-async def test_latest():
-    latest = AsyncLatest[int]()
+async def test_deque():
+    deque = AnyioDeque[int](1)
 
-    async def set_latest():
+    async def put_latest():
         for i in range(10):
-            await latest.set(i)
+            await deque.put(i)
             await anyio.sleep(0.1)
 
     async with anyio.create_task_group() as tg:
-        tg.start_soon(set_latest)
-        assert 0 == await latest.get()
-        assert 1 == await latest.get()
+        tg.start_soon(put_latest)
+        assert 0 == await deque.get()
+        assert 1 == await deque.get()
         await anyio.sleep(1)
-        assert 9 == await latest.get()
+        assert 9 == await deque.get()
