@@ -2,7 +2,7 @@
 import pytest
 from anyio import create_task_group, sleep
 
-from runner_with_api.helpers import AnyioDeque, http_long_polling
+from runner_with_api.utils import AnyioDeque, http_long_polling
 
 
 @pytest.mark.anyio
