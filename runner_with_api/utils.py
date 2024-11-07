@@ -1,5 +1,5 @@
 from collections import deque
-from typing import AsyncGenerator, Coroutine, Deque, Generic, TypeVar
+from typing import AsyncGenerator, Awaitable, Deque, Generic, TypeVar
 import anyio
 
 
@@ -36,7 +36,7 @@ class AnyioDeque(Generic[T]):
 T1 = TypeVar('T1')
 T2 = TypeVar('T2')
 
-async def http_long_polling(func: Coroutine[None, None, T1], keepalive_yield: T2, keepalive_period=1.
+async def http_long_polling(func: Awaitable[T1], keepalive_yield: T2, keepalive_period=1.
 ) -> AsyncGenerator[T1 | T2, None]:
     """Wait for the result of func, while yielding {keepalive_yield} every {keepalive_period} seconds.
     Once the result is available, yield it and return.

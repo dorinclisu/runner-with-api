@@ -1,3 +1,4 @@
+from __future__ import annotations
 import logging
 import signal
 import types
@@ -24,7 +25,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class AsyncRunnerWithAPI:
+class AsyncRunnerWithAPI:  # AnyioRunnerWithAPI
     """Base class for creating an async runner bound to an ASGI (FastAPI, Litestar, etc.)"""
 
     async def init(self) -> None:
@@ -63,7 +64,7 @@ class AsyncRunnerWithAPI:
                     logger.info('Canceling tasks')
                     tg.cancel_scope.cancel()
             except:
-                logger.error('Unexpected error, will request shutdown!', exc_info=True)
+                logger.exception('Unexpected error, will request shutdown!')
                 self._shutdown()
 
         return _lifespan

@@ -56,8 +56,7 @@ api.include_router(router)
 
 
 ###################################################################################################
-@pytest.mark.asyncio
-async def test_configure():
+def test_configure():
     assert runner.initialized is False
     assert runner.running is False
 
