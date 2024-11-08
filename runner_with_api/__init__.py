@@ -62,5 +62,6 @@ class ASGIRunner:
         """Run the API server while the runner lifespan is managed.
         Unix signal handlers are installed by uvicorn for graceful shutdown.
         Can pass uvicorn kwargs such as host, port, log_config.
+        Equivalent to uvicorn.run(app, **uvicorn_kwargs)
         """
         uvicorn.run(app, **uvicorn_kwargs)

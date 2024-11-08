@@ -2,14 +2,11 @@ import logging
 
 import pytest
 from anyio import sleep
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from runner_with_api.fastapi import FastapiAsyncRunner
+from runner_with_api.fastapi import FastapiAsyncRunner, runner_router as router
 
-
-
-router = APIRouter()
 
 
 class MyRunner(FastapiAsyncRunner):
@@ -49,11 +46,9 @@ class MyRunner(FastapiAsyncRunner):
 
 
 runner = MyRunner()
-runner.patch_fastapi_router(router)
 
 api = FastAPI(lifespan=runner.lifespan)
-api.include_router(router)
-
+api.include_router(runner.router)
 
 ###################################################################################################
 def test_configure():

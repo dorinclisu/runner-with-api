@@ -51,7 +51,7 @@ class MyRunner(LitestarAsyncRunner):
 
 runner = MyRunner()
 
-api = Litestar(runner.litestar_handlers(),
+api = Litestar(runner.handlers,
     lifespan=[runner.lifespan]
 )
 
