@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "runner-with-api"
-version = "0.8.0"
+version = "0.9.0"
 description = "Enable HTTP API on a long running process"
 authors = ["dorinclisu"]
 readme = "README.md"

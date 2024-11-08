@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 from anyio import create_task_group
-from fastapi import Request
+from litestar import Request
 
 from . import logger
 

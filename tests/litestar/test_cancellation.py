@@ -4,37 +4,27 @@ import logging
 import pytest
 from anyio import get_cancelled_exc_class, move_on_after, sleep
 from httpx import ASGITransport, AsyncClient
-from litestar import Litestar, get
-from litestar.background_tasks import BackgroundTask
+from litestar import Litestar, Request, get
 from litestar.testing import AsyncTestClient
 
-# nothing to import as Litestar seems to already implement handler cancellation
+from runner_with_api.litestar.cancellation import cancel_on_disconnect
+
 
 
 app = Litestar()
 
 
-async def background_task() -> None:
-    app.state.cancelled_background = False
-    try:
-        await sleep(1)
-    except get_cancelled_exc_class():
-        logging.info('Cancelled BackgroundTask')
-        app.state.cancelled_background = True
-        raise
-
-
-@get('/test',
-    background=BackgroundTask(background_task),
-)
-async def handler() -> bool:
+@get('/test')
+async def handler(request: Request) -> bool:
     app.state.cancelled = False
-    try:
-        await sleep(0.2)
-    except get_cancelled_exc_class():
-        logging.info('Cancelled Handler')
-        app.state.cancelled = True
-        raise
+    async with cancel_on_disconnect(request):
+        try:
+            await sleep(0.2)
+        except get_cancelled_exc_class():
+            logging.info('Cancelled Handler')
+            app.state.cancelled = True
+            raise
+
     return True
 
 
@@ -54,7 +44,6 @@ async def test_regular(client: AsyncTestClient | AsyncClient):
 
     assert r.json()
     assert app.state.cancelled is False
-    assert app.state.cancelled_background is False
 
 
 @pytest.mark.anyio
@@ -66,4 +55,3 @@ async def test_cancelled(client: AsyncTestClient | AsyncClient):
 
     assert scope.cancelled_caught
     assert app.state.cancelled is True
-    assert app.state.cancelled_background is None  # background was not even started
