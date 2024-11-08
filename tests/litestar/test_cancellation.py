@@ -30,7 +30,7 @@ async def background_task() -> None:
 async def handler() -> bool:
     app.state.cancelled = False
     try:
-        await sleep(0.5)
+        await sleep(0.2)
     except get_cancelled_exc_class():
         logging.info('Cancelled Handler')
         app.state.cancelled = True

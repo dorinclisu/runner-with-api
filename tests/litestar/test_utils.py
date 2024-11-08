@@ -16,7 +16,7 @@ from runner_with_api.litestar.utils import LongPollingResponse
 @get('/polling')
 async def polling() -> LongPollingResponse[bool]:
     async def func() -> bool:
-        await sleep(0.5)
+        await sleep(0.3)
         return True
 
     return LongPollingResponse(func(), keepalive=0.1)

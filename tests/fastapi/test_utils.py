@@ -15,7 +15,7 @@ app = FastAPI()
 @app.get('/polling', response_model=bool)
 async def polling():
     async def func():
-        await sleep(0.5)
+        await sleep(0.3)
         return True
 
     return LongPollingResponse(func(), keepalive=0.1)

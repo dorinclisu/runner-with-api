@@ -17,7 +17,7 @@ class MyRunner(LitestarAsyncRunner):
 
     async def init(self):
         logging.info('Initializing process ...')
-        await sleep(1)
+        await sleep(0.1)
         self.config = {}
         self.initialized = True
 

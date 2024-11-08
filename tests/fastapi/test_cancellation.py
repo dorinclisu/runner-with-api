@@ -16,7 +16,7 @@ async def cancellable(r: Request):
     app.state.cancelled = False
     async with cancel_on_disconnect(r):
         try:
-            await sleep(0.5)
+            await sleep(0.2)
         except get_cancelled_exc_class():
             app.state.cancelled = True
             raise

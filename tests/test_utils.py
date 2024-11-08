@@ -9,17 +9,21 @@ from runner_with_api.utils import AnyioDeque, http_long_polling
 async def test_deque():
     deque = AnyioDeque[int](1)
 
+    n = 5
+    assert n > 3
+    t = 0.1
+
     async def put_latest():
-        for i in range(10):
+        for i in range(n):
             await deque.put(i)
-            await sleep(0.1)
+            await sleep(t)
 
     async with create_task_group() as tg:
         tg.start_soon(put_latest)
         assert 0 == await deque.get()
         assert 1 == await deque.get()
-        await sleep(1)
-        assert 9 == await deque.get()
+        await sleep(n*t)
+        assert n-1 == await deque.get()
 
 
 @pytest.mark.anyio
