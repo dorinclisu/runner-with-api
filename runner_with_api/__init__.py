@@ -3,7 +3,7 @@ import logging
 import signal
 import types
 from contextlib import asynccontextmanager
-from typing import Any, Union
+from typing import Any
 
 import uvicorn
 from anyio import create_task_group
@@ -12,14 +12,13 @@ from uvicorn._types import ASGIApplication
 try:
     from fastapi import APIRouter
 except ImportError:
-    class APIRouter:  # type: ignore[no-redef]
-        ...
+    class APIRouter: ...  # type: ignore[no-redef]
 
 try:
     from litestar.handlers import BaseRouteHandler
 except ImportError:
-    class BaseRouteHandler:  # type: ignore[no-redef]
-        ...
+    class BaseRouteHandler: ...  # type: ignore[no-redef]
+
 
 
 logger = logging.getLogger(__name__)
@@ -70,7 +69,7 @@ class AsyncRunnerWithAPI:  # AnyioRunnerWithAPI
         return _lifespan
 
 
-    def run_with_api(self, app: Union[ASGIApplication, Any], **uvicorn_kwargs):
+    def run_with_api(self, app: ASGIApplication | Any, **uvicorn_kwargs):
         """Run the API listener on host:port while the runner lifespan is managed.
         Unix signal handlers are installed by uvicorn for graceful shutdown.
         Can pass uvicorn kwargs such as host, port, log_config.
