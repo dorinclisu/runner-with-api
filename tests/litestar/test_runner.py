@@ -5,11 +5,11 @@ from anyio import sleep
 from litestar import Litestar, get, put
 from litestar.testing import TestClient
 
-from runner_with_api import AsyncRunnerWithAPI
+from runner_with_api.litestar import LitestarAsyncRunner
 
 
 
-class MyRunner(AsyncRunnerWithAPI):
+class MyRunner(LitestarAsyncRunner):
     def __init__(self):
         self.initialized = False
         self.running = False

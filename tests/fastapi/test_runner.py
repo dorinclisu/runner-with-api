@@ -5,14 +5,14 @@ from anyio import sleep
 from fastapi import FastAPI, APIRouter
 from fastapi.testclient import TestClient
 
-from runner_with_api import AsyncRunnerWithAPI
+from runner_with_api.fastapi import FastapiAsyncRunner
 
 
 
 router = APIRouter()
 
 
-class MyRunner(AsyncRunnerWithAPI):
+class MyRunner(FastapiAsyncRunner):
     def __init__(self):
         self.initialized = False
         self.running = False

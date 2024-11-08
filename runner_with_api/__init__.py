@@ -1,7 +1,6 @@
 from __future__ import annotations
 import logging
 import signal
-import types
 from contextlib import asynccontextmanager
 from typing import Any
 
@@ -9,23 +8,13 @@ import uvicorn
 from anyio import create_task_group
 from uvicorn._types import ASGIApplication
 
-try:
-    from fastapi import APIRouter
-except ImportError:
-    class APIRouter: ...  # type: ignore[no-redef]
-
-try:
-    from litestar.handlers import BaseRouteHandler
-except ImportError:
-    class BaseRouteHandler: ...  # type: ignore[no-redef]
-
 
 
 logger = logging.getLogger(__name__)
 
 
-class AsyncRunnerWithAPI:  # AnyioRunnerWithAPI
-    """Base class for creating an async runner bound to an ASGI (FastAPI, Litestar, etc.)"""
+class ASGIRunner:
+    """Base class for creating an async process runner bound to an ASGI application"""
 
     async def init(self) -> None:
         """Initialize the runner. The ASGI app will not service requests until this method is finished."""
@@ -47,7 +36,7 @@ class AsyncRunnerWithAPI:  # AnyioRunnerWithAPI
 
     @property
     def lifespan(self):
-        """Lifespan context manager for the ASGIApplication (FastAPI, Litestar, etc.).
+        """Lifespan context manager for the ASGIApplication (FastAPI, Litestar, Starlette, etc.).
         It uses a closure to capture self for calling the user methods: init() and run().
         The user methods are canceled when the ASGI app is shutting down.
         The shutdown is also triggered if an exception is raised by the user methods.
@@ -58,7 +47,7 @@ class AsyncRunnerWithAPI:  # AnyioRunnerWithAPI
                 await self.init()
 
                 async with create_task_group() as tg:
-                    tg.start_soon(self.run)  # type: ignore[arg-type]
+                    tg.start_soon(self.run)
                     yield
                     logger.info('Canceling tasks')
                     tg.cancel_scope.cancel()
@@ -70,28 +59,8 @@ class AsyncRunnerWithAPI:  # AnyioRunnerWithAPI
 
 
     def run_with_api(self, app: ASGIApplication | Any, **uvicorn_kwargs):
-        """Run the API listener on host:port while the runner lifespan is managed.
+        """Run the API server while the runner lifespan is managed.
         Unix signal handlers are installed by uvicorn for graceful shutdown.
         Can pass uvicorn kwargs such as host, port, log_config.
         """
         uvicorn.run(app, **uvicorn_kwargs)
-
-
-    def patch_fastapi_router(self, router: APIRouter):
-        """Patch the FastAPI router (used for decorating the methods) to bind the decorated methods to the class instance."""
-        for route in router.routes:
-            route.endpoint = types.MethodType(route.endpoint, self)  # type: ignore[attr-defined]
-
-
-    def litestar_handlers(self) -> list[BaseRouteHandler]:
-        """Get all route handlers created by decorating the methods, to be plugged into Litestar."""
-        handlers: list[BaseRouteHandler] = []
-        for name in dir(self):
-            method = getattr(self, name)
-
-            if isinstance(method, BaseRouteHandler):
-                method._fn = types.MethodType(method._fn, self)
-                handlers.append(method)
-
-        handlers.sort(key=lambda h: h.handler_id)
-        return handlers

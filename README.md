@@ -22,10 +22,10 @@ import logging
 
 from anyio import sleep
 from litestar import Litestar, get, put
-from runner_with_api import AsyncRunnerWithAPI
+from runner_with_api.litestar import LitestarAsyncRunner
 
 
-class MyRunner(AsyncRunnerWithAPI):
+class MyRunner(LitestarAsyncRunner):
     def __init__(self):
         ...
 
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     # or just run from cli: $ uvicorn example:api
 
 ```
-See `tests/test_litestar.py` for more details.
+See `tests/litestar/test_runner.py` for more details.
 
 ### FastAPI
-See `tests/test_fastapi.py` for more details.
+See `tests/fastapi/test_runner.py` for more details.
